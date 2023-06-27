@@ -3,6 +3,8 @@ name: Code Analyze Pull Request
 on:
   pull_request:
     types: [opened, reopened]
+    branches:
+      - main
 
 permissions: write-all
 
@@ -33,7 +35,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: run test
-        run: ./gradlew test
+        run: ./gradlew --info test
 
       - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
         uses: sonarsource/sonarqube-scan-action@master
@@ -48,7 +50,6 @@ jobs:
             -Dsonar.java.libraries.empty=true 
             -Dsonar.java.binaries=/build/classes
             -Dsonar.sources=/src/main/java
-            -Dsonar.tests=/src/test/java
             -Dsonar.test.inclusions=**/*Test.java 
             -Dsonar.exclusions=**/*Application** 
             -Dsonar.sourceEncoding=UTF-8 
