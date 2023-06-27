@@ -50,7 +50,7 @@ jobs:
             -Dsonar.java.libraries.empty=true 
             -Dsonar.java.binaries=/build/classes
             -Dsonar.sources=/src/main/java
-            -Dsonar.tests=/src/test
+            -Dsonar.tests=/src/test/java
             -Dsonar.test.inclusions=**/*Test.java 
             -Dsonar.exclusions=**/*Application** 
             -Dsonar.sourceEncoding=UTF-8 
