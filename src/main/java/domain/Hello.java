@@ -9,4 +9,8 @@ public class Hello {
     public String hi() {
         return "hi";
     }
+
+    public String bye() {
+        return "bye";
+    }
 }
