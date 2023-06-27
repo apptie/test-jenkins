@@ -43,9 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
         with:
-          args: >
-            -Dsonar.host.url=${{ secrets.SONAR_TOKEN }}
-            -Dsonar.login=${{ secrets.SONAR_URL }}
+          args: > 
             -Dsonar.issuesReport.console.enable=true 
             -Dsonar.projectKey=sonarqube-test
             -Dsonar.java.libraries= 
