@@ -76,7 +76,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.0.0
         if: ${{ steps.sonar-quality.outputs.RESULT == 'OK' }}
         env:
+          SLACK_CHANNEL: general
           SLACK_COLOR: '#2c2d30'
-          SLACK_TITLE: 'github actions pull request result'
-          SLACK_MESSAGE: 'pull request 성공'
+          SLACK_TITLE: '메세지'
+          SLACK_MESSAGE: 'Post Content :rocket:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
