@@ -74,7 +74,7 @@ jobs:
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
-        if: ${{ steps.sonar-quality.outputs.RESULT == 'ok' }}
+        if: ${{ steps.sonar-quality.outputs.RESULT == 'OK' }}
         env:
           SLACK_COLOR: '#2c2d30'
           SLACK_TITLE: 'github actions pull request result'
