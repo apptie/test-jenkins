@@ -72,10 +72,11 @@ jobs:
         run: |
           echo ${{ steps.sonar-quality.outputs.RESULT }}
 
-#      - name: Notify Slack
-#        uses: rtCamp/action-slack-notify@v2.0.0
-#        env:
-#          SLACK_COLOR: '#2c2d30'
-#          SLACK_TITLE: 'github actions pull request result'
-#          SLACK_TEXT: ${{ steps.sonar-quality.outputs.RESULT }}
-#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Notify Slack
+        uses: rtCamp/action-slack-notify@v2.0.0
+        if: ${{ steps.sonar-quality.outputs.RESULT == 'ok' }}
+        env:
+          SLACK_COLOR: '#2c2d30'
+          SLACK_TITLE: 'github actions pull request result'
+          SLACK_TEXT: 'pull request 성공'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
