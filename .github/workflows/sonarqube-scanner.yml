@@ -66,28 +66,25 @@ jobs:
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
-          echo "RESULT=${STATUS}" >> $GITHUB_OUTPUT
-
-      - name: outputs test
-        run: |
-          echo ${{ steps.sonar-quality.outputs.RESULT }}
+          echo "RESULT=${RESULT}" >> $GITHUB_OUTPUT
+          echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
-        if: ${{ steps.sonar-quality.outputs.RESULT == 'OK' }}
+        if: ${{ steps.sonar-quality.outputs.STATUS == 'OK' }}
         env:
           SLACK_CHANNEL: general
-          SLACK_COLOR: '#2c2d30'
+          SLACK_COLOR: 'green'
           SLACK_TITLE: '메세지'
           SLACK_MESSAGE: 'pull request 요청 성공'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
-        if: ${{ steps.sonar-quality.outputs.RESULT != 'OK' }}
+        if: ${{ steps.sonar-quality.outputs.STATUS != 'OK' }}
         env:
           SLACK_CHANNEL: general
-          SLACK_COLOR: '#2c2d30'
+          SLACK_COLOR: 'red'
           SLACK_TITLE: '메세지'
-          SLACK_MESSAGE: 'pull request 요청 실패'
+          SLACK_MESSAGE: 'pull request 요청 실패\n${{ steps.sonar-quality.outputs.RESULT }}'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
