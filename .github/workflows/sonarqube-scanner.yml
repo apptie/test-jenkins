@@ -66,6 +66,7 @@ jobs:
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
           echo "$STATUS"
+          echo "${{github.event.number}}"
           
           if [ "$STATUS" != "OK" ]; then
             echo "SonarQube Quality Gate check failed"
