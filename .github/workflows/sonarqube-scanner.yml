@@ -66,12 +66,12 @@ jobs:
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
-          echo "::set-output name=result::Hello, World"
+          echo "RESULT=${STATUS}" >> $GITHUB_OUTPUT
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
         env:
           SLACK_COLOR: '#2c2d30'
           SLACK_TITLE: 'github actions pull request result'
-          SLACK_TEXT: ${{ needs.sonar-quality.outputs.result }}
+          SLACK_TEXT: ${{ steps.sonar-quality.outputs.RESULT }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
