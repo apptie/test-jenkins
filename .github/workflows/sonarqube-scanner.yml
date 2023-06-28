@@ -59,7 +59,7 @@ jobs:
             -Dsonar.analysis.mode=publish
 
       - name: test
-        run: ls -al .scannerwork
+        run: cat .scannerwork/report-task.txt
 #      - name: SonarQube Quality Gate check
 #        id: sonarqube-quality-gate-check
 #        uses: sonarsource/sonarqube-quality-gate-action@master
