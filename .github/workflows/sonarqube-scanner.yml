@@ -65,7 +65,7 @@ jobs:
 
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
-          ERROR_METRIC_KEYS=$echo "$RESULT" | jq -r '.projectStatus.conditions[] | select(.status == "ERROR").metricKey')
+          ERROR_METRIC_KEYS=$(echo "$RESULT" | jq -r '.projectStatus.conditions[] | select(.status == "ERROR").metricKey')
           
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
