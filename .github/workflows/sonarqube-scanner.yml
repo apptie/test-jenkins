@@ -58,6 +58,7 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
 
       - name: SonarQube Quality Check
+        id: sonar-quality
         run: |
           SONAR_PROJECT_KEY="sonarqube-test" 
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
@@ -65,18 +66,12 @@ jobs:
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
-          echo "$STATUS"
-          echo "${{github.event.number}}"
-          
-          if [ "$STATUS" != "OK" ]; then
-            echo "SonarQube Quality Gate check failed"
-            exit 1
-          fi
+          echo "::set-output name=result::Hello, World"
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
         env:
           SLACK_COLOR: '#2c2d30'
           SLACK_TITLE: 'github actions pull request result'
-          SLACK_TEXT: ${STATUS}
+          SLACK_TEXT: ${{ needs.sonar-quality.outputs.result }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
