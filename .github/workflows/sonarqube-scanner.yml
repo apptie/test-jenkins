@@ -70,15 +70,12 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
 
-      - name: variable test
-        run: |
-          echo "${{ github.event.pull_request.user.login }}"
-
       - name: slack test
         run: |
+          GIT_ID=${{ github.event.pull_request.user.login }}
           SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
           
-          if [ "${{ github.event.pull_request.user.login }}" == "apptie" ]; then
+          if [ "$GIT_ID" == "apptie" ]; then
             echo 'if run'
             SLACK_DATA+="<${{ secrets.apptie }}>"
           fi
