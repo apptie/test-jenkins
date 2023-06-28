@@ -62,10 +62,11 @@ jobs:
           SONAR_PROJECT_KEY="sonarqube-test" 
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
 
-          RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}")
+          RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
           echo "$STATUS"
+          
           if [ "$STATUS" != "OK" ]; then
             echo "SonarQube Quality Gate check failed"
             exit 1
