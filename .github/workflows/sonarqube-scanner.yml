@@ -68,10 +68,14 @@ jobs:
 
           echo "RESULT=${STATUS}" >> $GITHUB_OUTPUT
 
-      - name: Notify Slack
-        uses: rtCamp/action-slack-notify@v2.0.0
-        env:
-          SLACK_COLOR: '#2c2d30'
-          SLACK_TITLE: 'github actions pull request result'
-          SLACK_TEXT: ${{ steps.sonar-quality.outputs.RESULT }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: outputs test
+        run: |
+          echo ${{ steps.sonar-quality.outputs.RESULT }}
+
+#      - name: Notify Slack
+#        uses: rtCamp/action-slack-notify@v2.0.0
+#        env:
+#          SLACK_COLOR: '#2c2d30'
+#          SLACK_TITLE: 'github actions pull request result'
+#          SLACK_TEXT: ${{ steps.sonar-quality.outputs.RESULT }}
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
