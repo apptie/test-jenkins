@@ -77,4 +77,4 @@ jobs:
       - name: slack test
         run: |
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
-          -d '{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "abc"}}]}'
+          -d '{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "<${ secrets.${{ github.event.pull_request.user.login }} }>"  }}]}'
