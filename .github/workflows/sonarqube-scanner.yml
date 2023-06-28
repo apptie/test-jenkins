@@ -78,5 +78,5 @@ jobs:
         env:
           SLACK_COLOR: '#2c2d30'
           SLACK_TITLE: 'github actions pull request result'
-          SLACK_TEXT: "$STATUS"
+          SLACK_TEXT: ${STATUS}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
