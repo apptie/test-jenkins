@@ -79,7 +79,9 @@ jobs:
           SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
           
           if [ "${{ github.event.pull_request.user.login }}" == "apptie" ]; then
-            SLACK_DATA=SLACK_DATA+${{ secrets.apptie }}
-          SLACK_DATA=SLACK_DATA+'" }}]}'
+            echo 'if run'
+            SLACK_DATA+="${{ secrets.apptie }}"
+          fi
+          SLACK_DATA+='" }}]}'
           
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d ${SLACK_DATA}
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_DATA}"
