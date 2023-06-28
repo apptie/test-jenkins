@@ -64,7 +64,6 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
         with:
           args: >
-            -Dsonar.issuesReport.console.enable=true 
             -Dsonar.projectKey=sonarqube-test
             -Dsonar.java.libraries= 
             -Dsonar.java.libraries.empty=true 
