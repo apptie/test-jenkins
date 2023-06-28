@@ -78,23 +78,3 @@ jobs:
         run: |
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
           -d '{ "text" : "PR 브랜치 분석", "blocks" : [ {"type":"section", "text:{"type":"mrkdwn","text":{<${{ secrets.${github.event.pull_request.user.id} }}>}}"} ] }'
-
-#      - name: Notify Slack
-#        uses: rtCamp/action-slack-notify@v2.0.0
-#        if: ${{ steps.sonar-quality.outputs.STATUS == 'OK' }}
-#        env:
-#          SLACK_CHANNEL: general
-#          SLACK_COLOR: 'green'
-#          SLACK_TITLE: '메세지'
-#          SLACK_MESSAGE: 'pull request 요청 성공'
-#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-#
-#      - name: Notify Slack
-#        uses: rtCamp/action-slack-notify@v2.0.0
-#        if: ${{ steps.sonar-quality.outputs.STATUS != 'OK' }}
-#        env:
-#          SLACK_CHANNEL: general
-#          SLACK_COLOR: 'red'
-#          SLACK_TITLE: '메세지'
-#          SLACK_MESSAGE: 'pull request 요청 실패 - ${{ steps.sonar-quality.outputs.ERROR_METRIC_KEYS }}'
-#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
