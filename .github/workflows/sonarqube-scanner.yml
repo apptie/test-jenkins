@@ -82,5 +82,4 @@ jobs:
             SLACK_DATA=SLACK_DATA+${{ secrets.apptie }}
           SLACK_DATA=SLACK_DATA+'" }}]}'
           
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
-          -d "${SLACK_DATA}"
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d ${SLACK_DATA}
