@@ -1,4 +1,4 @@
-name: Code Analyze Pull Request
+name: PR 코드 분석
 
 on:
   pull_request:
@@ -43,7 +43,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
         with:
-          args: > 
+          args: >
             -Dsonar.issuesReport.console.enable=true 
             -Dsonar.projectKey=sonarqube-test
             -Dsonar.java.libraries= 
@@ -65,9 +65,10 @@ jobs:
 
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
-
-          echo "RESULT=${RESULT}" >> $GITHUB_OUTPUT
+          ERROR_METRIC_KEYS=$echo "$RESULT" | jq -r '.projectStatus.conditions[] | select(.status == "ERROR").metricKey')
+          
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
 
       - name: Notify Slack
         uses: rtCamp/action-slack-notify@v2.0.0
@@ -86,5 +87,5 @@ jobs:
           SLACK_CHANNEL: general
           SLACK_COLOR: 'red'
           SLACK_TITLE: '메세지'
-          SLACK_MESSAGE: 'pull request 요청 실패\n${{ steps.sonar-quality.outputs.RESULT }}'
+          SLACK_MESSAGE: 'pull request 요청 실패 - ${{ steps.sonar-quality.outputs.ERROR_METRIC_KEYS }}'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
