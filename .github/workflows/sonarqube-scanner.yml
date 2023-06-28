@@ -56,7 +56,7 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8 
             -Dsonar.java.coveragePlugin=jacoco 
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
-            -Dsonar.sources=.
+            -Dsonar.analysis.mode=publish
 
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
