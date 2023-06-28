@@ -57,28 +57,6 @@ jobs:
             -Dsonar.java.coveragePlugin=jacoco 
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
 
-      - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=sonarqube-test
-            -Dsonar.java.libraries= 
-            -Dsonar.java.libraries.empty=true 
-            -Dsonar.java.binaries=build/classes
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.test.inclusions=**/*Test.java 
-            -Dsonar.exclusions=**/*Application** 
-            -Dsonar.sourceEncoding=UTF-8 
-            -Dsonar.java.coveragePlugin=jacoco 
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
-            -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
-            -Dsonar.pullrequest.base=${{ github.BASE_REF }}
-            -Dsonar.pullrequest.branch=${{ github.REF }}
-
       - name: test
         run: cat .scannerwork/report-task.txt
 
@@ -87,7 +65,7 @@ jobs:
           SONAR_PROJECT_KEY="sonarqube-test" 
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
 
-          RESULT=$(curl -s -u "${{ secrets.SONAR_TOKEN }}" "https://sonarqube.example.com/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}")
+          RESULT=$(curl -s -u "${{ secrets.SONAR_TOKEN }}" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
           echo "$STATUS"
