@@ -57,15 +57,12 @@ jobs:
             -Dsonar.java.coveragePlugin=jacoco 
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
 
-      - name: test
-        run: cat .scannerwork/report-task.txt
-
       - name: SonarQube Quality Gate check
         run: |
           SONAR_PROJECT_KEY="sonarqube-test" 
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
 
-          RESULT=$(curl -s -u "${{ secrets.SONAR_TOKEN }}" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}")
+          RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}")
           STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
 
           echo "$STATUS"
