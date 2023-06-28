@@ -76,5 +76,11 @@ jobs:
 
       - name: slack test
         run: |
+          SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
+          <${{ secrets.${ github.event.pull_request.user.login } }}>"  }}]}'
+          if [ "${{ github.event.pull_request.user.login }}" == "apptie" ]; then
+            SLACK_DATA=SLACK_DATA+${{ secrets.apptie }}
+          SLACK_DATA=SLACK_DATA+'" }}]}'
+          
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
-          -d '{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "<${{ secrets.${ github.event.pull_request.user.login } }}>"  }}]}'
+          -d "${SLACK_DATA}"
