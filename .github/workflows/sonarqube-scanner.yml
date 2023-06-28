@@ -80,7 +80,7 @@ jobs:
           
           if [ "${{ github.event.pull_request.user.login }}" == "apptie" ]; then
             echo 'if run'
-            SLACK_DATA+="${{ secrets.apptie }}"
+            SLACK_DATA+="<${{ secrets.apptie }}>"
           fi
           SLACK_DATA+='" }}]}'
           
