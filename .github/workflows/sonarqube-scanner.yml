@@ -81,7 +81,7 @@ jobs:
             AUTHOR="${{ secrets.apptie_display_name }}"
           fi
           
-          SONAR_SCANNER_URL=${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}
+          SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
           REVIEWERS="" 
           for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do 
