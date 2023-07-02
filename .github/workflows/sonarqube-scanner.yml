@@ -21,21 +21,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: cache gradle
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: chmod gradle
-        run: chmod +x gradlew
-
-      - name: run test
-        run: ./gradlew --info test
+#      - name: cache gradle
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#
+#      - name: chmod gradle
+#        run: chmod +x gradlew
+#
+#      - name: run test
+#        run: ./gradlew --info test
 
 #      - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
 #        uses: sonarsource/sonarqube-scan-action@master
@@ -83,32 +83,32 @@ jobs:
           
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
-          REVIEWERS=""
-          for target in "${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}"; do
-            echo "target : $target"
-            if [ "$target" == "lognitude" ]; then
-              echo "target : $target"
-            REVIEWERS+="<@${{ secrets.apptie }}> "
-          fi
-          done
+          reviewers=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers" \
+            | jq -r '.[] | .login')
           
+          IFS=$'\n' read -rd '' -a reviewer_array <<< "$reviewers"
+          for reviewer in "${reviewer_array[@]}"; do
+            echo "Reviewer: $reviewer"
+          done
+  
           echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
           echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
 
-      - name: slack test
-        run: |
-          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="${{ steps.variables.outputs.AUTHOR }}"
-          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
-          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "  
-          SLACK_MESSAGE+=">\n>\n>*분석 대시보드*\n><"
-          SLACK_MESSAGE+="${{ steps.variables.outputs.SONAR_SCANNER_URL }}"
-          SLACK_MESSAGE+="> \n>\n>분석 결과\n>" 
-          SLACK_MESSAGE+=":white_check_mark:"  
-          SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"  
-          SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS }}"  
-          SLACK_MESSAGE+='"}}]}'
-          
-        
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+#      - name: slack test
+#        run: |
+#          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+#          SLACK_MESSAGE+="${{ steps.variables.outputs.AUTHOR }}"
+#          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+#          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+#          SLACK_MESSAGE+=">\n>\n>*분석 대시보드*\n><"
+#          SLACK_MESSAGE+="${{ steps.variables.outputs.SONAR_SCANNER_URL }}"
+#          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+#          SLACK_MESSAGE+=":white_check_mark:"
+#          SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
+#          SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS }}"
+#          SLACK_MESSAGE+='"}}]}'
+#
+#
+#          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
