@@ -81,7 +81,7 @@ jobs:
             AUTHOR="${{ secrets.apptie_display_name }}"
           fi
           
-          echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
+          echo "AUTHOR=`${AUTHOR}`" >> $GITHUB_OUTPUT
 
       - name: slack test
         run: |
