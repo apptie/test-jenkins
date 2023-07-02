@@ -98,7 +98,7 @@ jobs:
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+=${{ steps.variables.outputs.AUTHOR }}
-          SLACK_MESSAGE+="}}]}"
+          SLACK_MESSAGE+='"}}]}'
           
         
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
