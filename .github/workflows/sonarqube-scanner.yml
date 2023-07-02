@@ -87,7 +87,7 @@ jobs:
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
           SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
-          SLACK_DATA+="<${{ steps.pr-author.outputs.AUTHOR }}>"
+          SLACK_DATA+="<${{ steps.variables.outputs.AUTHOR }}>"
           SLACK_DATA+='" }}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_DATA}"
