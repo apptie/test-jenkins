@@ -87,11 +87,11 @@ jobs:
           echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
 
-#          REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
+          REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
 
-          REVIEWERS_GIT_ID=$(echo "${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}" | jq -r '.[]')
+          reviewers=$(echo "$REVIEWERS_GIT_ID" | jq -r '.[]')
 
-          for reviewer in $REVIEWERS_GIT_ID; do
+          for reviewer in $reviewers; do
             echo "Reviewer: $reviewer"
           done
           
