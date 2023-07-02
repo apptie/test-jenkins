@@ -73,7 +73,8 @@ jobs:
       - name: set reviewers
         id: reviewer
         run: |
-          echo "REVIEWER=${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}" >> $GITHUB_OUTPUT
+          REVIEWER=${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}
+          echo "REVIEWER=${REVIEWER}" >> $GITHUB_OUTPUT
 
       - name: set variables
         id: variables
