@@ -99,6 +99,7 @@ jobs:
               REVIEWERS_SLACK_ID+="<@${{ secrets.apptie }}> "
             elif [ "$reviewer" == "newbie-back" ]; then
               REVIEWERS_SLACK_ID+="<@${{ secrets.apptie }}> "
+            fi
           done
           
           echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
