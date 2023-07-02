@@ -83,18 +83,11 @@ jobs:
           
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
-          reviewers=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers" \
-            | jq -r '.[] | .login')
-          
-          IFS=$'\n' read -rd '' -a reviewer_array <<< "$reviewers"
-          for reviewer in "${reviewer_array[@]}"; do
-            echo "Reviewer: $reviewer"
-          done
-  
           echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
           echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
+
+          echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq '.'
 
 #      - name: slack test
 #        run: |
