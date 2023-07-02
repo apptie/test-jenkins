@@ -83,10 +83,12 @@ jobs:
           
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
-          REVIEWERS_GIT_ID=$(echo "${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}" | jq -r '.[]')
+          PR_REVIEWERS='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
+          REVIEWERS_GIT_ID=$(echo "PR_REVIEWERS" | jq -r '.[]')
+          
           REVIEWERS_SLACK_ID=""
           
-          for reviewer in $REVIEWERS_GIT_ID; do
+          for reviewer in REVIEWERS_GIT_ID; do
             echo "Reviewer: $reviewer"
             if [ "$reviewer" == "lognitude" ]; then
               REVIEWERS_SLACK_ID+="<@${{ secrets.apptie }}> "
