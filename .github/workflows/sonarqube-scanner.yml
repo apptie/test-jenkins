@@ -96,7 +96,16 @@ jobs:
 
       - name: slack test
         run: |
-          CONTENT=$(cat script/slack_pr_message.txt)
-          SLACK_MESSAGE=$(echo "$CONTENT" | sed "s/AUTHOR/${{ steps.variables.outputs.AUTHOR }}/g" | sed "s/PR_LINK/${{ github.event.pull_request.html_url }}/g" | sed "s/SONAR_SCANNER_URL/`${{ steps.variables.outputs.SONAR_SCANNER_URL }}`/g" | sed "s/REVIEWERS/${{ steps.variables.outputs.REVIEWERS }}/g")  
-          
+          SLACK_MESSAGE={"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>
+          SLACK_MESSAGE+=${{ steps.variables.outputs.AUTHOR }} 
+          SLACK_MESSAGE+=\n>\n>*PR 링크*\n><
+          SLACK_MESSAGE+=${{ github.event.pull_request.html_url }} 
+          SLACK_MESSAGE+=>\n>\n>*분석 대시보드*\n><
+          SLACK_MESSAGE+=${{ steps.variables.outputs.SONAR_SCANNER_URL }}
+          SLACK_MESSAGE+=> \n>\n>분석 결과\n>
+          SLACK_MESSAGE+=:white_check_mark:
+          SLACK_MESSAGE+=\n>\n>*리뷰어*\n>
+          SLACK_MESSAGE+=${{ steps.variables.outputs.REVIEWERS }}
+          SLACK_MESSAGE+=}}]}
+        
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
