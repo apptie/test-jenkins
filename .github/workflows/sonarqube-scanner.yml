@@ -102,7 +102,10 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "  
           SLACK_MESSAGE+=">\n>\n>*분석 대시보드*\n><"
           SLACK_MESSAGE+="${{ steps.variables.outputs.SONAR_SCANNER_URL }}"
-          SLACK_MESSAGE+=">"
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>" 
+          SLACK_MESSAGE+=":white_check_mark:"  
+          SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"  
+          SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS }}"  
           SLACK_MESSAGE+='"}}]}'
           
         
