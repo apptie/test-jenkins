@@ -77,7 +77,7 @@ jobs:
           
           if [ "$GIT_ID" == "apptie" ]; then
             SLACK_ID="${{ secrets.apptie }}"
-          elif [ "$GIT_ID" == "apptie" ] then
+          elif [ "$GIT_ID" == "apptie" ]; then
             SLACK_ID="${{ secrets.apptie }}"
           fi
           
