@@ -86,6 +86,7 @@ jobs:
           REVIEWERS="" 
           for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do 
             if [ "$target" == "lognitude" ]; then
+              echo "if run"
               reviewers+="<@${{ secrets.apptie }}> "
             fi
           done
