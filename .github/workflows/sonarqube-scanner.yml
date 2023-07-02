@@ -84,9 +84,9 @@ jobs:
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
           REVIEWERS="" 
-          for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do 
+          for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do
+            echo "$target"
             if [ "$target" == "lognitude" ]; then
-              echo "if run"
               reviewers+="<@${{ secrets.apptie }}> "
             fi
           done
