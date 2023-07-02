@@ -70,24 +70,24 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
 
-      - name: set pr author
-        id: pr-author
+      - name: set variables
+        id: variables
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
           
           if [ "$GIT_ID" == "apptie" ]; then
-            SLACK_ID="${{ secrets.apptie }}"
+            AUTHOR="${{ secrets.apptie_display_name }}"
           elif [ "$GIT_ID" == "apptie" ]; then
-            SLACK_ID="${{ secrets.apptie }}"
+            AUTHOR="${{ secrets.apptie_display_name }}"
           fi
           
-          echo "SLACK_ID=${SLACK_ID}" >> $GITHUB_OUTPUT
+          echo "AUTHOR=`${AUTHOR}`" >> $GITHUB_OUTPUT
 
       - name: slack test
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
           SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
-          SLACK_DATA+="<${{ steps.pr-author.outputs.SLACK_ID }}>"
+          SLACK_DATA+="<${{ steps.pr-author.outputs.AUTHOR }}>"
           SLACK_DATA+='" }}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_DATA}"
