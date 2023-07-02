@@ -38,8 +38,8 @@ sonarqube {
     def token = System.getenv("SONAR_TOKEN")
 
     properties {
-        property "sonar.host.url", hostUrl
-        property "sonar.login", token
+        property "sonar.host.url", $hostUrl
+        property "sonar.login", $token
         property "sonar.projectKey", "sonarqube-test"
         property "sonar.java.libraries", ""
         property "sonar.java.libraries.empty", "true"
