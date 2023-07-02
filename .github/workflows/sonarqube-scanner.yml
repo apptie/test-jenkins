@@ -89,7 +89,10 @@ jobs:
 
           REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
 
-          echo "reviewers : $REVIEWERS_GIT_ID"
+          for reviewer in "$(echo "$REVIEWERS_GIT_ID" | jq -r '.[]')"; do
+            echo "Reviewer: $reviewer"
+          done
+          
           
 
 #      - name: slack test
