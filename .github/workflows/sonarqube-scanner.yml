@@ -89,7 +89,6 @@ jobs:
             echo "target : $target"
             if [ "$target" == "lognitude" ]; then
               echo "target : $target"
-            fi
             REVIEWERS+="<@${{ secrets.apptie }}> "
           fi
           done
