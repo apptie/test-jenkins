@@ -70,6 +70,11 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
 
+      - name: set reviewers
+        id: reviewer
+        run: |
+          echo "REVIEWER=${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}" >> $GITHUB_OUTPUT
+
       - name: set variables
         id: variables
         run: |
@@ -83,10 +88,12 @@ jobs:
           
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
+          REVIEWER=(${{ steps.variables.outputs.REVIEWER }})
           REVIEWERS="" 
-          for target in "${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}"; do
+          for target in "${REVIEWER[@]}"; do
             echo "target : $target"
             if [ "$target" == "lognitude" ]; then
+              echo "target : $target"
               reviewers+="<@${{ secrets.apptie }}> "
             fi
           done
