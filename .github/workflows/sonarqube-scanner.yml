@@ -97,6 +97,6 @@ jobs:
       - name: slack test
         run: |
           CONTENT=$(cat script/slack_pr_message.txt)
-          SLACK_MESSAGE= $(echo "$CONTENT" | sed "s/AUTHOR/${{ steps.variables.outputs.AUTHOR }}" | sed "s/PR_LINK/${{ github.event.pull_request.html_url }}" | sed "s/REVIEWERS/${{ steps.variables.outputs.REVIEWERS }}")  
+          SLACK_MESSAGE=$(echo "$CONTENT" | sed "s/AUTHOR/${{ steps.variables.outputs.AUTHOR }}/g" | sed "s/PR_LINK/${{ github.event.pull_request.html_url }}/g" | sed "s/SONAR_SCANNER_URL/${{ steps.variables.outputs.SONAR_SCANNER_URL }}/g" | sed "s/REVIEWERS/${{ steps.variables.outputs.REVIEWERS }}/g")  
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
