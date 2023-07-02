@@ -85,7 +85,7 @@ jobs:
           
           REVIEWER=${{ toJSON(github.event.pull_request.requested_reviewers[*].login) }}
           REVIEWERS="" 
-          for target in $(echo "${reviewers}" | jq -r '.[]'); do
+          for target in $(echo "${REVIEWER}" | jq -r '.[]'); do
             echo "target : $target"
             if [ "$target" == "lognitude" ]; then
               echo "target : $target"
