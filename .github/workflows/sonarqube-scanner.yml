@@ -86,7 +86,7 @@ jobs:
           REVIEWERS="" 
           for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do 
             if [ "$target" == "lognitude" ]; then
-              reviewers+="<${{ secrets.apptie }}> "
+              reviewers+="<@${{ secrets.apptie }}> "
             fi
           done
           
@@ -100,6 +100,8 @@ jobs:
           SLACK_MESSAGE+="${{ steps.variables.outputs.AUTHOR }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "  
+          SLACK_MESSAGE+=">\n>\n>*분석 대시보드*\n><"
+          SLACK_MESSAGE+="${{ steps.variables.outputs.SONAR_SCANNER_URL }}"
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+='"}}]}'
           
