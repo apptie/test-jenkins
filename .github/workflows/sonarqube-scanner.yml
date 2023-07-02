@@ -87,7 +87,7 @@ jobs:
           echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
 
-          echo '${{ toJson(github.event.pull_request.requested_reviewers[*]) }}' | jq '.'
+          echo '${{ toJson(github.event.pull_request.requested_reviewers[*]) }}'
 
 #      - name: slack test
 #        run: |
