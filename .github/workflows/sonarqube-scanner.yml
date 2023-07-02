@@ -70,11 +70,16 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
 
+      - name: Set Git ID
+        id: set_git_id
+        run: |
+          echo "GIT_ID=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
+          
+
       - name: slack test
         run: |
-          GIT_ID=${{ github.event.pull_request.user.login }}
           SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
-          SLACK_DATA+="<${{ secrets[$GIT_ID] }}>"
+          SLACK_DATA+="<${{ secrets[GIT_ID] }}>"
           SLACK_DATA+='" }}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_DATA}"
