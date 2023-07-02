@@ -81,13 +81,22 @@ jobs:
             AUTHOR="${{ secrets.apptie_display_name }}"
           fi
           
+          SONAR_SCANNER_URL=${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}
+          
+          REVIEWERS="" 
+          for target in "${{ github.event.pull_request.requested_reviewers.*.login }}"; do 
+            if [ "$target" == "lognitude" ]; then
+              reviewers+="<${{ secrets.apptie }}> "
+            fi
+          done
+          
           echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
+          echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
+          echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
 
       - name: slack test
         run: |
-          GIT_ID=${{ github.event.pull_request.user.login }}
-          SLACK_DATA='{ "text": "PR 브랜치 분석", "blocks": [ { "type": "section", "text": {"type":"mrkdwn","text": "'
-          SLACK_DATA+="<${{ steps.variables.outputs.AUTHOR }}>"
-          SLACK_DATA+='" }}]}'
+          CONTENT=$(cat script/slack_pr_message.txt)
+          SLACK_MESSAGE= $(echo "$CONTENT" | sed "s/AUTHOR/${{ steps.variables.outputs.AUTHOR }} | sed "s/PR_LINK/${{ github.event.pull_request.html_url }}" | sed "s/REVIEWERS/${{ steps.variables.outputs.REVIEWERS }}"  
           
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_DATA}"
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
