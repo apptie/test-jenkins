@@ -135,7 +135,7 @@ jobs:
           
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
-          SLACK_MESSAGE+="${ AUTHOR_ID }"
+          SLACK_MESSAGE+='${ AUTHOR_ID }'
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
