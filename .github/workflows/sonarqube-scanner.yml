@@ -35,7 +35,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: run test
-        run: ./gradlew --info testCoverage
+        run: ./gradlew testCoverage
 
       - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
         uses: sonarsource/sonarqube-scan-action@master
