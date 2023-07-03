@@ -129,20 +129,6 @@ jobs:
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
 
-      - name: set author slack id
-        if: always()
-        id: author-slack
-        run: |
-          GIT_ID=${{ github.event.pull_request.user.login }}
-          
-          if [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR_NAME="${{ secrets.apptie_display_name }}"
-            AUTHOR_ID="${{ secrets.apptie }}"
-          elif [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR_NAME="${{ secrets.apptie_display_name }}"
-            AUTHOR_ID="${{ secrets.apptie }}"
-          fi
-
       - name: slack failed test
         if: failure()
         run: |
