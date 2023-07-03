@@ -119,7 +119,7 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
 
       - name: slack failed test
-        if: env.WORKFLOW_CONCLUSION == 'failure'
+        if: failure()
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"실패"}}]}'
           
