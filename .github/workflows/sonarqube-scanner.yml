@@ -35,7 +35,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: run test
-        run: ./gradlew --info test
+        run: ./gradlew --info testCoverage
 
       - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
         uses: sonarsource/sonarqube-scan-action@master
@@ -52,7 +52,7 @@ jobs:
             -Dsonar.sources=src/main/java
             -Dsonar.tests=src/test/java
             -Dsonar.test.inclusions=**/*Test.java
-            -Dsonar.exclusions=**/*Application**, **/*Dto
+            -Dsonar.exclusions='**/*Application**', '**/*Dto'
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
@@ -116,4 +116,13 @@ jobs:
           SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS_SLACK_ID }}"
           SLACK_MESSAGE+='"}}]}'
 
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+
+      - name: slack failed test
+        run: |
+          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="${{ steps.variables.outputs.AUTHOR }}"
+          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+          SLACK_MESSAGE+='"}}]}'
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
