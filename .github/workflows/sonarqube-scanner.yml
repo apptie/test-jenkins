@@ -42,9 +42,11 @@ jobs:
           GIT_ID=${{ github.event.pull_request.user.login }}
           
           if [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR="${{ secrets.apptie_display_name }}"
+            AUTHOR_NAME="${{ secrets.apptie_display_name }}"
+            AUTHOR_ID="${{ secrets.apptie }}"
           elif [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR="${{ secrets.apptie_display_name }}"
+            AUTHOR_NAME="${{ secrets.apptie_display_name }}"
+            AUTHOR_ID="${{ secrets.apptie }}"
           fi
 
       - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
@@ -83,14 +85,6 @@ jobs:
       - name: set variables
         id: variables
         run: |
-          GIT_ID=${{ github.event.pull_request.user.login }}
-          
-          if [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR="${{ secrets.apptie_display_name }}"
-          elif [ "$GIT_ID" == "apptie" ]; then
-            AUTHOR="${{ secrets.apptie_display_name }}"
-          fi
-          
           SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
           
           REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
@@ -115,7 +109,7 @@ jobs:
       - name: slack test
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR }}"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+=">\n>\n>*분석 대시보드*\n><"
