@@ -121,10 +121,6 @@ jobs:
       - name: slack failed test
         if: env.WORKFLOW_CONCLUSION == 'failure'
         run: |
-          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="실패"
-          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
-          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+='"}}]}'
+          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"실패"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
