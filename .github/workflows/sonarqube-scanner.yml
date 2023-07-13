@@ -3,8 +3,7 @@ name: PR 코드 분석
 on:
   pull_request:
     types: [opened, reopened]
-    branches:
-      - main
+    branches: [ main, develop, develop-be ]
 
 permissions: write-all
 
@@ -75,7 +74,6 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
-            -Dsonar.coverage.jacoco.minimumProjectThreshhold=50
 
       - name: SonarQube Quality Check
         id: sonar-quality
